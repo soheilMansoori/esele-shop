@@ -1,0 +1,9 @@
+:root {
+    --main-color: '#FFA6BC'
+}
+
+body {
+    box-sizing: border-box;
+    padding: 0px;
+    margin: 0px;
+}
