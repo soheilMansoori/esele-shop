@@ -1,14 +1,14 @@
-import { useRoutes } from 'react-router-dom'
-import routes from './router/router'
-import Header from './components/Header/Header';
-function App() {
-  const route = useRoutes(routes)
+import { AuthContextProvider } from './contexts/authContext/authContext';
+import Routes from './router/Routes';
+
+const App = () => {
   return (
-    <>
-      <Header />
-      {route}
-    </>
+    <AuthContextProvider>
+      <Routes />
+    </AuthContextProvider>
   );
 }
 
 export default App;
+
+

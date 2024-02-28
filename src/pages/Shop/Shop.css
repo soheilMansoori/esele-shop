@@ -1,0 +1,28 @@
+.rc-slider {
+    position: relative;
+    height: 14px;
+    width: 100%;
+    touch-action: none;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+.rc-slider-rail {
+    position: absolute;
+    width: 100%;
+    height: 4px;
+}
+.rc-slider-track {
+    position: absolute;
+    height: 4px;
+}
+
+.rc-slider-step {
+    position: absolute;
+    width: 100%;
+    height: 4px;
+}
+
+[dir] .rc-slider:not(.rc-slider-disabled) .rc-slider-dot, [dir] .rc-slider:not(.rc-slider-disabled) .rc-slider-handle {
+    border-color: #fc7e9d;
+}

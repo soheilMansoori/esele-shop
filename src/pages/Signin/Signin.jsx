@@ -1,0 +1,213 @@
+import { useContext, useState } from 'react'
+
+// import formik package
+import { useFormik } from 'formik';
+
+// import Link and redirect  
+import { Link, useNavigate } from 'react-router-dom'
+
+// import auth context 
+import authContext from '../../contexts/authContext/authContext';
+
+export default function Signin() {
+  const [isOpenMenu, setIsOpenMenu] = useState(false)
+  const auth = useContext(authContext)
+  const navigate = useNavigate()
+
+  // formik for validation and get input values 
+  const form = useFormik({
+    initialValues: { username: '', password: '', phone: '' },
+    onSubmit: (values, { setSubmitting }) => {
+      // console.log('from submit and values is => ', values);
+      signinHandler(values)
+      setTimeout(() => {
+        navigate('/')
+      }, 5000)
+    },
+
+    validate: (values) => {
+      const errors = {}
+      // validate RegExp here
+      const userNameRegex = new RegExp(/^\w{5,12}$/)
+      const passwordRegex = new RegExp(/^\w{5,12}$/)
+      const phoneRegex = new RegExp(/^(09)+\d{9}$/)
+
+      // validate conditions 
+      if (!userNameRegex.test(values.username)) {
+        errors.username = 'نام کاربری مناسب نمیباشد'
+      }
+      if (!passwordRegex.test(values.password)) {
+        errors.password = 'رمز عبور مناسب نمیباشد'
+      }
+      if (!phoneRegex.test(values.phone)) {
+        errors.phone = 'شماره تماس درست نمیباشد'
+      }
+
+      return errors
+    }
+
+  });
+
+  // Handler signin  
+  const signinHandler = ({ username, password, phone }) => {
+    const newUser = {
+      token: crypto.randomUUID(),
+      role: "USER",
+      username,
+      name: "",
+      family: "",
+      password,
+      phone,
+      address: [],
+      userBasket: [],
+      orders: [],
+      favorites: []
+    }
+    fetch('http://localhost:4000/users', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(newUser),
+    })
+      .then(res => res.json())
+      .then(data => {
+        // console.log("data => ", data);
+        auth.login(data.token, data);
+        navigate('/')
+      }).catch(error => console.log(error.message));
+  }
+
+  return (
+    <div className="full-layout wrapper bg-full-screen-image blank-page dark-layout login-page">
+      <div className="app-content">
+        <div className="content-wrapper">
+          <div className="content-body">
+            <div className="flexbox-container">
+              <main className="main w-100">
+                <div className="m-0 justify-content-center row">
+                  <div className="d-flex justify-content-center col-md-6 col-lg-4" style={{ maxWidth: "500px" }}>
+                    <div className="card" style={{ maxWidth: "350px" }}>
+                      <div className="m-0 row">
+                        <div className="p-0 col-md-12 col-lg-12">
+                          <div className="card">
+                            <div className="w-100 pt-1 pb-1">
+                              <div className="card-title">
+                                <div className="position-absolute position-left-0 position-top-0 p-1">
+                                  <Link to='/' aria-current="page" className="d-flex text-black login-header-back-home active">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                      <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                                    </svg>
+                                    <div className="my-auto mr-1 ml-1">صفحه اصلی</div>
+                                  </Link>
+                                </div>
+                                <h4 className="text-center w-100 pt-3">
+                                  <div className="w-100 d-flex justify-content-center">
+                                    <Link to="/">
+                                      <img src="./img/logo/logo.webp" alt="logo" width="250px" />
+                                    </Link>
+                                  </div>
+                                </h4>
+                              </div>
+                            </div>
+                            <div className="h-100 pt-1  card-body">
+                              <div className="text-center my-auto">
+                                <form onSubmit={form.handleSubmit} className="step-wrapper col-lg-12 m-auto form-group row align-items-center mb-2 av-invalid">
+                                  <div className="col-lg-12 p-0">
+                                    <div className="col-lg-12 row p-0 m-0 justify-content-between">
+                                      <div className="col-12 p-0">
+
+                                        <div className="form-group">
+                                          <label className="mb-1 d-flex">نام کاربری</label>
+                                          <input
+                                            name="username"
+                                            value={form.values.username}
+                                            onChange={form.handleChange}
+                                            onBlur={form.handleBlur}
+                                            dir="rtl"
+                                            autocomplete="off"
+                                            type="text"
+                                            className="form-control is-untouched is-pristine av-invalid form-control"
+                                          />
+                                          {form.errors.username && form.touched.username && (<div className="text-danger d-flex mt-1">{form.errors.username}</div>)}
+                                        </div>
+                                        <div className="form-group">
+                                          <label className="mb-1 d-flex">رمز عبور</label>
+                                          <input
+                                            name="password"
+                                            value={form.values.password}
+                                            onChange={form.handleChange}
+                                            onBlur={form.handleBlur}
+                                            dir="rtl"
+                                            autocomplete="off"
+                                            type="text"
+                                            className="form-control is-untouched is-pristine av-invalid form-control"
+                                          />
+                                          {form.errors.password && form.touched.password && <div className="text-danger d-flex mt-1">{form.errors.password}</div>}
+                                        </div>
+
+                                        <div className="form-group">
+                                          <label className="mb-1 d-flex">شماره همراه</label>
+                                          <input
+                                            name="phone"
+                                            value={form.values.phone}
+                                            onChange={form.handleChange}
+                                            onBlur={form.handleBlur}
+                                            dir="rtl"
+                                            autocomplete="off"
+                                            type="text"
+                                            className="form-control is-untouched is-pristine av-invalid form-control"
+                                          />
+                                          {form.errors.phone && form.touched.phone && <div className="text-danger d-flex mt-1">{form.errors.phone}</div>}
+                                        </div>
+
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div className="w-100 d-flex justify-content-between">
+                                    <button type="submit" className="w-100 submit-btn mt-2 mx-0 btn bg-primary text-white" disabled={form.isSubmitting}>{form.isSubmitting ? 'درحال ارسال ...' : 'ثبت نام'}</button>
+                                  </div>
+                                </form>
+                              </div>
+                              {isOpenMenu && <div className='cardbox-shadow' />}
+                              <div className="login-card-footer">
+                                <div className="title" onMouseEnter={() => setIsOpenMenu(true)}>شبکه های اجتماعی</div>
+                                <div className={`collapse ${isOpenMenu && 'show'}`}>
+                                  <div className="card" onMouseLeave={() => setIsOpenMenu(false)}>
+                                    <div className="card-body">
+                                      <div className="cardbox d-flex justify-content-center my-0">
+                                        <a href="#" className="card instagram" title="Esele_shop">
+                                          <span></span>
+                                          <span></span>
+                                          <span></span>
+                                          <span></span>
+                                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                                        </a>
+                                        <a href="#" className="card telegram" title="Eseleshop">
+                                          <span></span>
+                                          <span></span>
+                                          <span></span>
+                                          <span></span>
+                                          <svg className="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true"><path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z"></path></svg>
+                                        </a>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </main>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}

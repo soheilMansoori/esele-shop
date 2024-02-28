@@ -1,0 +1,123 @@
+.eoQfeT {
+    width: 2rem;
+    height: 2rem;
+    top: 4px;
+    right: 10px;
+    z-index: 99999;
+    display: flex;
+    justify-content: space-around;
+    flex-flow: column;
+}
+
+
+
+.eoQfeT .menu {
+    width: 3rem;
+    height: 4rem;
+    border-radius: 5px;
+    background: rgb(255, 166, 188);
+    box-shadow: rgba(255, 144, 170, 0.44) 0px 5px 9px 0px;
+    padding: 4px;
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    justify-content: center;
+}
+
+.gYsezf {
+    width: 2rem;
+    height: 2rem;
+    position: fixed;
+    top: 16px;
+    right: 10px;
+    z-index: 99999;
+    display: flex;
+    justify-content: space-around;
+    flex-flow: column;
+}
+
+
+
+.hVNCaP {
+    background: rgba(171, 171, 171, 0.32);
+    backdrop-filter: blur(7px);
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100vh;
+    z-index: 99997;
+}
+
+[dir] .kqKNQu,
+[dir] .sc-bczRLJ {
+    background: hsla(0, 0%, 67.1%, .32);
+}
+
+[dir] dl,
+[dir] ol,
+[dir] ul {
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
+
+.hIsEIG {
+    list-style: none;
+    overflow: hidden auto;
+    font-size: 15px;
+    display: flex;
+    padding-right: 0px;
+    flex-flow: column;
+    background-color: rgb(241, 241, 241);
+    box-shadow: rgba(100, 100, 100, 0.75) 0px 8px 6px;
+    position: fixed;
+    transform: translateX(0px);
+    top: 0px;
+    right: 0px;
+    height: 100vh;
+    width: 300px;
+    padding-top: 0px;
+    transition: transform 0.3s ease-in-out 0s;
+    border-radius: 100px 0px 0px;
+    z-index: 99998;
+}
+
+[dir] .parent-mobile-menu>.menu-mobile-item {
+    padding-bottom: 15px;
+}
+
+[dir=rtl] .menu-mobile-item {
+    margin-right: 5px;
+}
+
+.menu-mobile-item {
+    color: #161821;
+}
+
+.parent-mobile-menu a {
+    font-size: 16px !important;
+    font-weight: 500;
+    color: #161821 !important;
+}
+
+[dir] .has-child-item .box-item-hasChild {
+    background: rgba(255, 166, 188, .55);
+}
+
+.has-child-item .box-item-hasChild {
+    width: 76%;
+}
+
+[dir=rtl] .menu-collapse {
+    border-right: 0.5px solid rgba(251, 147, 173, .85);
+}
+
+[dir] .menu-collapse {
+    padding: 18px 0;
+    background: rgba(251, 147, 173, .85);
+}
+
+.parent-mobile-menu .nav-item {
+    padding: 10px !important;
+}
