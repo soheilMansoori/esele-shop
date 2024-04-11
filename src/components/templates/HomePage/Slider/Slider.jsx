@@ -42,11 +42,11 @@ export default function Slider() {
                 >
                     {sliders.length && sliders.map((slider) => (
                         <SwiperSlide key={slider.id} className="swiper-slide swiper-slide-active" width="100" style={{ marginLeft: "50px" }}>
-                            <div>
-                                <a href="#">
-                                    <img src={slider.imgSrc} width="100%" />
-                                </a>
-                            </div>
+
+                            <a href="#">
+                                <img src={slider.imgSrc} width="100%" />
+                            </a>
+
                         </SwiperSlide>
                     ))}
                 </Swiper>
