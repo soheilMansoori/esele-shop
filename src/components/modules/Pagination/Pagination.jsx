@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { memo, useCallback, useEffect, useState } from 'react'
 import { useSearchParams, useLocation } from 'react-router-dom';
 
-export default function Pagination({ pagesCount, currentPage, prev, next }) {
-    const [searchParams, setSearchParams] = useSearchParams()
-    const [pages, setPages] = useState([])
-    const location = useLocation()
+const Pagination = memo(({ pagesCount, currentPage, prev, next }) => {
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [pages, setPages] = useState([]);
+    const location = useLocation();
+
     useEffect(() => {
         pagesCount && setPages(Array.from(Array(Number(pagesCount)).keys()))
         if (pages.length > 6) {
@@ -14,24 +15,26 @@ export default function Pagination({ pagesCount, currentPage, prev, next }) {
             setPages(copyPages)
         }
 
-    }, [pagesCount])
+    }, [pagesCount, pages])
 
 
-    const nextPage = () => {
+    const nextPage = useCallback(() => {
         // console.log('click next');
         next && setSearchParams({ page: next })
-    }
-    const previousPage = () => {
+    }, [next, setSearchParams])
+
+    const previousPage = useCallback(() => {
         // console.log('click prev');
         prev && setSearchParams({ page: prev })
-    }
-    const setPage = (pageNumber) => {
-        pageNumber && setSearchParams({ page: pageNumber })
-    }
+    }, [prev, setSearchParams]);
 
-    const showMore = () => {
-        setPages(Array.from(Array(Number(pagesCount)).keys()))
-    }
+    const setPage = useCallback((pageNumber) => {
+        pageNumber && setSearchParams({ page: pageNumber })
+    }, [setSearchParams])
+
+    const showMore = useCallback(() => {
+        return setPages(Array.from(Array(Number(pagesCount)).keys()))
+    }, [pagesCount])
 
     return (
         <div className="data-list-header d-flex justify-content-center mt-5 flex-wrap mb-2">
@@ -46,7 +49,7 @@ export default function Pagination({ pagesCount, currentPage, prev, next }) {
                         </a>
                     </li>
 
-                    {pages?.length && pages?.map((page,index) => {
+                    {pages?.length && pages?.map((page, index) => {
                         if (page == '...') {
                             return <li key={index}>
                                 <a role="button">
@@ -76,4 +79,7 @@ export default function Pagination({ pagesCount, currentPage, prev, next }) {
             </div>
         </div>
     )
-}
+})
+
+
+export default Pagination;

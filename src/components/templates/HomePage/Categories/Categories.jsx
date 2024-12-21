@@ -15,9 +15,10 @@ import { Link } from 'react-router-dom';
 
 export default function Categories() {
     const [categories, setCategories] = useState([])
+
     useEffect(() => {
         // get all categories from server
-        fetch('http://localhost:4000/categories')
+        fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/categories`)
             .then(res => res.json())
             .then(categories => setCategories(categories))
             .catch(error => console.log(error.message))

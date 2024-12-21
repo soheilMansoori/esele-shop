@@ -1,4 +1,4 @@
-import  { useEffect, useContext, useState } from 'react'
+import { useEffect, useContext, useState, useCallback } from 'react'
 
 // import components
 import Breadcrumb from '../../../components/modules/Breadcrumb/Breadcrumb'
@@ -22,27 +22,15 @@ export default function Address() {
     const [cities, setCities] = useState([]);
     const [address, setAddress] = useState([]);
 
-
-    useEffect(() => {
-        // get all provinces
-        fetch('http://iran-locations-api.vercel.app/api/v1/states')
-            .then(res => res.json())
-            .then(data => setProvinces(data))
-            .catch(error => console.log(error.message))
-            
-        // get all addresses 
-        getAllAddresses()
-    }, [auth])
-
     // get main Cities when onChanging provinces
-    const getMainCities = (cityName) => {
+    const getMainCities = useCallback((cityName) => {
         if (cityName !== '0' || cityName !== '-1') {
             fetch(`http://iran-locations-api.vercel.app/api/v1/cities?state=${cityName}`)
                 .then(res => res.json())
                 .then(data => setCities(data.cities))
                 .catch(error => console.log(error.message))
         }
-    }
+    }, [])
 
     // formik for validation and get input values
     const form = useFormik({
@@ -72,32 +60,18 @@ export default function Address() {
     });
 
 
-    // add new address
-    const addNewAddress = ({ state, city, address }) => {
-        const newUserAddress = {
-            id: crypto.randomUUID(),
-            state,
-            city,
-            address,
-        }
-        const userInfos = { ...auth.userInfos, address: [...auth.userInfos.address, newUserAddress] }
-        fetch(`http://localhost:4000/users/${auth.userID}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(userInfos)
-        })
+
+    // get all addresses
+    const getAllAddresses = useCallback(() => {
+        fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/users/${auth.userID}`)
             .then(res => res.json())
-            .then(data => {
-                auth.reRender()
-                setIsOpenAddressForm(false)
-                getAllAddresses()
-            }).catch(error => console.log(error.message))
-    }
+            .then(data => setAddress(data.address))
+            .catch(error => console.log(error.message))
+    }, [auth])
+
 
     // remove address
-    const removeAddress = (id) => {
+    const removeAddress = useCallback((id) => {
         swal({
             title: 'آیا از حذف آدرس مطمعن هستید',
             icon: 'warning',
@@ -105,7 +79,7 @@ export default function Address() {
         }).then(result => {
             if (result) {
                 const userInfos = { ...auth.userInfos, address: auth.userInfos.address.filter(item => item.id !== id) }
-                fetch(`http://localhost:4000/users/${auth.userID}`, {
+                fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/users/${auth.userID}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json'
@@ -119,15 +93,46 @@ export default function Address() {
                     }).catch(error => console.log(error.message))
             }
         });
-    }
+    }, [auth, getAllAddresses])
 
-    // get all addresses
-    function getAllAddresses() {
-        fetch(`http://localhost:4000/users/${auth.userID}`)
+
+    // add new address
+    const addNewAddress = useCallback(({ state, city, address }) => {
+        const newUserAddress = {
+            id: crypto.randomUUID(),
+            state,
+            city,
+            address,
+        }
+        const userInfos = { ...auth.userInfos, address: [...auth.userInfos.address, newUserAddress] }
+        fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/users/${auth.userID}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(userInfos)
+        })
             .then(res => res.json())
-            .then(data => setAddress(data.address))
+            .then(data => {
+                auth.reRender()
+                setIsOpenAddressForm(false)
+                getAllAddresses()
+            }).catch(error => console.log(error.message))
+    }, [auth, getAllAddresses])
+
+
+    useEffect(() => {
+        document.title = "user-panel page";
+
+        // get all provinces
+        fetch('http://iran-locations-api.vercel.app/api/v1/states')
+            .then(res => res.json())
+            .then(data => setProvinces(data))
             .catch(error => console.log(error.message))
-    }
+
+        // get all addresses 
+        getAllAddresses()
+    }, [auth, getAllAddresses])
 
     return (
         <div className="content-wrapper">

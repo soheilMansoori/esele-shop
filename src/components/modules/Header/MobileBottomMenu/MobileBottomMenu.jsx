@@ -4,12 +4,14 @@ import authContext from '../../../../contexts/authContext/authContext'
 export default function MobileBottomMenu() {
     const auth = useContext(authContext)
     const [basketProductsCount, setBasketProductsCount] = useState(null)
+
     useEffect(() => {
-        fetch(`http://localhost:4000/users/${auth.userID}`)
+        fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/users/${auth.userID}`)
             .then(res => res.json())
             .then(data => setBasketProductsCount(data.userBasket.length))
             .catch(error => console.log(error.message));
     }, [auth]);
+
     return (
         <div className="mobile-bottom">
             <div className="mobile-left-bar">

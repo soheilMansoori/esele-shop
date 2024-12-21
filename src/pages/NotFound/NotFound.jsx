@@ -1,6 +1,9 @@
+import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
 export default function NotFound() {
+    useEffect(() => document.title = "404 page");
+
     return (
         <div className="position-relative">
             <div className="error-container">

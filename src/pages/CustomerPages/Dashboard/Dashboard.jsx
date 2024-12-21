@@ -1,7 +1,7 @@
-import { useContext, useState, useEffect } from 'react'
+import { useContext, useState, useEffect, useCallback } from 'react'
 
 // import Link and redirect 
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 // import auth context
 import authContext from '../../../contexts/authContext/authContext'
@@ -10,26 +10,19 @@ export default function Dashboard() {
     const auth = useContext(authContext)
     const [orders, setOrders] = useState([]);
     const [favorites, setFavorites] = useState([]);
-    const navigate = useNavigate()
-
-    useEffect(() => {
-        // get all favorites from server
-        getAllFavorites()
-        // get all orders from server
-        getAllOrders()
-    }, [auth])
+    // const navigate = useNavigate()
 
     // get all favorites from server
-    function getAllFavorites() {
-        fetch(`http://localhost:4000/users/${auth.userID}`)
+    const getAllFavorites = useCallback(() => {
+        fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/users/${auth.userID}`)
             .then(res => res.json())
             .then(data => setFavorites(data.favorites))
             .catch(error => console.log(error.message))
-    };
+    }, [auth]);
 
     // get all orders from server
-    function getAllOrders() {
-        fetch(`http://localhost:4000/users/${auth.userID}`)
+    const getAllOrders = useCallback(() => {
+        fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/users/${auth.userID}`)
             .then(res => {
                 if (res.ok) {
                     return res.json()
@@ -41,7 +34,17 @@ export default function Dashboard() {
             })
             .catch(error => console.log(error.message))
 
-    }
+    }, [auth]);
+
+    useEffect(() => {
+        document.title = "user-panel page";
+
+        // get all favorites from server
+        getAllFavorites()
+        // get all orders from server
+        getAllOrders()
+    }, [auth, getAllFavorites, getAllOrders])
+
 
     return (
         <div className="content-wrapper">

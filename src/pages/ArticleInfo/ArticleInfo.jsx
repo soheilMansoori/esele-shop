@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 // import components
 import Header from '../../components/modules/Header/Header'
@@ -19,8 +19,9 @@ export default function ArticleInfo() {
 
   // params
   const { name } = useParams()
+
   // notifies
-  const shareHandlerNotify = () => toast.success('!!!! کپی شد', {
+  const shareHandlerNotify = useCallback(() => toast.success('!!!! کپی شد', {
     position: "bottom-right",
     autoClose: 5000,
     hideProgressBar: false,
@@ -30,26 +31,25 @@ export default function ArticleInfo() {
     progress: undefined,
     theme: "light",
     transition: Slide,
-
-  })
+  }), []);
 
   useEffect(() => {
-    // Automatically scrolls to top whenever page reload
-    window.scrollTo(0, 0)
+    document.title = "article-info page";
+
 
     // get all articles from server
-    fetch(`http://localhost:4000/articles?title=${name}`)
+    fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/articles?title=${name}`)
       .then(res => res.json())
       .then(articleInfo => setArticleInfo(...articleInfo))
       .catch(error => console.log(error.message))
-  }, [])
+  }, [name])
 
   // Handler for copy in user clipboard
-  const shareHandler = () => {
-    navigator.clipboard.writeText(`http://localhost:3000/article-info/${name}`)
+  const shareHandler = useCallback(() => {
+    navigator.clipboard.writeText(`${window.location.origin}/article-info/${name}`)
       .then(() => shareHandlerNotify())
       .catch(error => console.log('cant copy', error.message))
-  }
+  }, [name, shareHandlerNotify])
 
   return (
     <>

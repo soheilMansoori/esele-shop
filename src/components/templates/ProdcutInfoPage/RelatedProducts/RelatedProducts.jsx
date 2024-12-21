@@ -13,7 +13,7 @@ import { Link } from 'react-router-dom';
 export default function RelatedProducts() {
     const [products, setProducts] = useState([])
     useEffect(() => {
-        fetch('http://localhost:4000/products')
+        fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/products`)
             .then(res => res.json())
             .then(data => setProducts(data.slice(0, 12)))
             .catch(error => console.log(error.message));

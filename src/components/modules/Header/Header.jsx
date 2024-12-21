@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 
 // import components start
 import Navbar from './Navbar/Navbar'
@@ -13,27 +13,29 @@ function Header() {
     const [windowWidth, setWindowWidth] = useState(window.innerWidth)
     const [megaMenuItems, setMegaMenuItems] = useState([])
 
+
+    // get mega menu items from the server
+    const getMegaMenuData = useCallback(() => {
+        fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/megaMenu`)
+            .then(res => res.json())
+            .then(data => setMegaMenuItems(data))
+            .catch(error => console.log(error.message));
+    }, []);
+
     useEffect(() => {
         // get all the menu items 
-        getMegaMenu()
+        getMegaMenuData();
+
         // responseHandler for response Header
         const responseHandler = () => {
-            // console.log('resize');
-            setWindowWidth(window.innerWidth)
+            return setWindowWidth(window.innerWidth);
         }
 
         // save performance 
         window.addEventListener('resize', responseHandler)
         return () => window.removeEventListener('resize', responseHandler)
-    }, [windowWidth])
+    }, [windowWidth, getMegaMenuData])
 
-    // get mega menu items from the server
-    function getMegaMenu() {
-        fetch('http://localhost:4000/megaMenu')
-            .then(res => res.json())
-            .then(data => setMegaMenuItems(data))
-            .catch(error => console.log(error.message));
-    }
 
     return (
         <div div className="header-main w-100" >
@@ -57,7 +59,7 @@ function Header() {
                             <NavbarMobile />
 
                             {/* Hamburger menu */}
-                            <MenuMobile megaMenuItems={megaMenuItems}/>
+                            <MenuMobile megaMenuItems={megaMenuItems} />
 
                             {/* bottom menu */}
                             <MobileBottomMenu />

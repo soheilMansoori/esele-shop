@@ -1,11 +1,12 @@
 import { useFormik } from 'formik'
+import { useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 // sweetalert
 import swal from 'sweetalert'
 
 export default function ContactUsForm() {
     const navigate = useNavigate()
-    
+
     const form = useFormik({
         initialValues: { name: '', email: '', description: '' },
         onSubmit: (values, { setSubmitting }) => {
@@ -35,11 +36,11 @@ export default function ContactUsForm() {
 
     })
 
-    function sendForm(form) {
+    const sendForm = useCallback((form) => {
         let options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
         let today = new Date().toLocaleDateString('fa-IR', options);
 
-        fetch('http://localhost:4000/contacts', {
+        fetch('process.env.REACT_APP_BACKEND_BASE_URL/contacts', {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json; charset=UTF-8'
@@ -57,7 +58,7 @@ export default function ContactUsForm() {
             }
         }).catch(error => console.log(error.message))
 
-    }
+    }, [navigate])
 
     return (
         <div className="contact_us shadow mt-0 text-center p-0 rounded mt-md-4 row">

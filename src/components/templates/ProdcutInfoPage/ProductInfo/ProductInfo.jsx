@@ -1,18 +1,18 @@
-import { useContext, useEffect, useState } from 'react'
+import { memo, useCallback, useContext, useEffect, useState } from 'react'
 import authContext from '../../../../contexts/authContext/authContext'
 import { useNavigate } from 'react-router-dom'
 
 import { ToastContainer, toast, Slide } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-export default function ProductInfos({ info }) {
+const ProductInfos = memo(({ info }) => {
     const navigate = useNavigate()
     const auth = useContext(authContext)
     const [isFavorite, setIsFavorite] = useState(false)
     const [isFullScreen, setIsFullScreen] = useState(false)
 
     // notifies
-    const addToFavoritesNotify = () => toast.success('محصول به علاقه مندی حالا اضافه شد', {
+    const addToFavoritesNotify = useCallback(() => toast.success('محصول به علاقه مندی حالا اضافه شد', {
         position: "bottom-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -22,9 +22,9 @@ export default function ProductInfos({ info }) {
         progress: undefined,
         theme: "light",
         transition: Slide,
-    });
+    }), []);
 
-    const addToBasketWhenNotLoginNotify = () => toast.error('برای افزودن به سبد خرید ابتدا وارد حساب کاربری خود شوید', {
+    const addToBasketWhenNotLoginNotify = useCallback(() => toast.error('برای افزودن به سبد خرید ابتدا وارد حساب کاربری خود شوید', {
         position: "bottom-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -34,9 +34,9 @@ export default function ProductInfos({ info }) {
         progress: undefined,
         theme: "light",
         transition: Slide,
-    });
+    }), []);
 
-    const removeFromFavoritesNotify = () => toast.warn('محصول از علاقه مندی ها حذف شد', {
+    const removeFromFavoritesNotify = useCallback(() => toast.warn('محصول از علاقه مندی ها حذف شد', {
         position: "bottom-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -46,9 +46,9 @@ export default function ProductInfos({ info }) {
         progress: undefined,
         theme: "light",
         transition: Slide,
-    });
+    }), []);
 
-    const addToBasketNotify = () => toast.success('محصول به سبد خرید اضافه شد', {
+    const addToBasketNotify = useCallback(() => toast.success('محصول به سبد خرید اضافه شد', {
         position: "bottom-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -58,14 +58,14 @@ export default function ProductInfos({ info }) {
         progress: undefined,
         theme: "light",
         transition: Slide,
-    });
+    }), []);
 
 
     useEffect(() => {
         setIsFavorite(auth.userInfos.favorites?.some((item) => item.id === info.id))
-    }, [info])
+    }, [info, auth])
 
-    const addToBasket = () => {
+    const addToBasket = useCallback(() => {
         if (auth.isLoggedIn) {
             const newProduct = { ...info, inBasket: 1 };
             const userBasket = auth.userInfos.userBasket
@@ -84,7 +84,7 @@ export default function ProductInfos({ info }) {
 
             const mainUserInfos = { ...auth.userInfos, userBasket }
 
-            fetch(`http://localhost:4000/users/${auth.userID}`, {
+            fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/users/${auth.userID}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -98,14 +98,14 @@ export default function ProductInfos({ info }) {
                 }).catch(error => console.log(error.message));
         }
 
-    }
+    }, [auth, addToBasketNotify, info])
 
-    const addToFavorites = () => {
+    const addToFavorites = useCallback(() => {
         if (auth.isLoggedIn) {
             const favorites = [...auth.userInfos.favorites, info]
             const mainUserInfos = { ...auth.userInfos, favorites }
             setIsFavorite(true)
-            fetch(`http://localhost:4000/users/${auth.userID}`, {
+            fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/users/${auth.userID}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -121,13 +121,13 @@ export default function ProductInfos({ info }) {
         } else {
             navigate('/login')
         }
-    }
+    }, [auth, addToFavoritesNotify, info, navigate])
 
-    const removeFromFavorites = () => {
+    const removeFromFavorites = useCallback(() => {
         const favorites = auth.userInfos.favorites.filter(item => item.id !== info.id)
         const mainUserInfos = { ...auth.userInfos, favorites }
         setIsFavorite(false)
-        fetch(`http://localhost:4000/users/${auth.userID}`, {
+        fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/users/${auth.userID}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -140,7 +140,7 @@ export default function ProductInfos({ info }) {
                 removeFromFavoritesNotify()
             })
             .catch(error => console.log(error.message));
-    }
+    }, [auth, info, removeFromFavoritesNotify])
 
     return (
         <>
@@ -303,36 +303,9 @@ export default function ProductInfos({ info }) {
             <ToastContainer />
         </>
     )
-}
+});
 
-{/* <div class="image-gallery image-gallery-using-mouse" aria-live="polite">
-    <div class="image-gallery-content bottom fullscreen">
-        <div class="image-gallery-slide-wrapper bottom">
-            <div class="image-gallery-slides">
-                <div aria-label="Go to Slide 1" tabIndex="-1" class="image-gallery-slide  center " role="button" style={{ display: "inherit", transform: "translate3d(0%, 0px, 0px)" }}>
-                    <img class="image-gallery-image" src={info.imgSrc} alt="" srcSet="" height="" width="" sizes="" title="" loading="eager" />
-                </div>
-            </div>
-            <button onClick={() => setIsFullScreen(false)} type="button" class="image-gallery-icon image-gallery-fullscreen-button" aria-label="Open Fullscreen">
-                <svg class="image-gallery-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"></path>
-                </svg>
-            </button>
-        </div>
-        <div class="image-gallery-thumbnails-wrapper bottom thumbnails-swipe-horizontal">
-            <div class="image-gallery-thumbnails">
-                <nav class="image-gallery-thumbnails-container" aria-label="Thumbnail Navigation" style={{ transform: "translate3d(0px, 0px, 0px)", transition: "all 450ms ease-out 0s" }}>
-                    <button type="button" tabIndex="0" aria-pressed="true" aria-label="Go to Slide 1" class="image-gallery-thumbnail active">
-                        <span class="image-gallery-thumbnail-inner">
-                            <img class="image-gallery-thumbnail-image" src={info.imgSrc} />
-                        </span>
-                    </button>
-                </nav>
-            </div>
-        </div>
-    </div>
-</div> */}
-
+export default ProductInfos;
 
 
 

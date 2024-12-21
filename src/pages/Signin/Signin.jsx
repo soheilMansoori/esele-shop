@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useCallback, useContext, useEffect, useState } from 'react'
 
 // import formik package
 import { useFormik } from 'formik';
@@ -49,7 +49,7 @@ export default function Signin() {
   });
 
   // Handler signin  
-  const signinHandler = ({ username, password, phone }) => {
+  const signinHandler = useCallback(({ username, password, phone }) => {
     const newUser = {
       token: crypto.randomUUID(),
       role: "USER",
@@ -63,7 +63,7 @@ export default function Signin() {
       orders: [],
       favorites: []
     }
-    fetch('http://localhost:4000/users', {
+    fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/users`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -76,7 +76,10 @@ export default function Signin() {
         auth.login(data.token, data);
         navigate('/')
       }).catch(error => console.log(error.message));
-  }
+  }, [navigate, auth])
+
+
+  useEffect(() => document.title = "signin page");
 
   return (
     <div className="full-layout wrapper bg-full-screen-image blank-page dark-layout login-page">

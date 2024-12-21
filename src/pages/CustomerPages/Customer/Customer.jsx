@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 // import components
 import SideBar from '../../../components/modules/SideBar/SideBar'
 import Footer from '../../../components/templates/CustomerPages/CustomerPage/Footer/Footer'
@@ -16,6 +16,8 @@ export default function Customer() {
     const [isOpenSideBar, setIsOpenSideBar] = useState(true)
     const auth = useContext(authContext)
     const navigate = useNavigate()
+
+    useEffect(() => document.title = "user-panel page");
 
     // logout Handler 
     const logoutHandler = () => {

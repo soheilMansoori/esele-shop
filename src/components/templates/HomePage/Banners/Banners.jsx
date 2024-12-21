@@ -5,7 +5,7 @@ export default function Banners() {
     const [banners, setBanners] = useState([])
     useEffect(() => {
         // get all of banners from server
-        fetch('http://localhost:4000/banners')
+        fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/banners`)
             .then(res => res.json())
             .then(banners => setBanners(banners))
             .catch(error => console.log(error.message))

@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import Slider from '../../components/templates/HomePage/Slider/Slider'
 import Categories from '../../components/templates/HomePage/Categories/Categories'
 import SpecialOffers from '../../components/templates/HomePage/SpecialOffers/SpecialOffers'
@@ -8,13 +7,12 @@ import Banners from '../../components/templates/HomePage/Banners/Banners'
 import Articles from '../../components/templates/HomePage/Articles/Articles'
 import Header from '../../components/modules/Header/Header'
 import Footer from '../../components/modules/Footer/Footer'
+import { useEffect } from 'react'
 
 
 
 export default function Home() {
-
-  // Automatically scrolls to top whenever page reload
-  useEffect(() => window.scrollTo(0, 0), [])
+  useEffect(() => document.title = "Home Page");
   return (
     <>
       <Header />
@@ -27,7 +25,6 @@ export default function Home() {
         <Banners />
         <Articles />
       </main>
-
       <Footer />
     </>
   )

@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
+import React, { memo, useCallback, useState } from 'react'
 import { Collapse } from 'react-bootstrap'
 import { Link, useNavigate } from 'react-router-dom'
 import './MenuMobile.css'
 
 
-export default function MenuMobile({ megaMenuItems }) {
+const MenuMobile = memo(({ megaMenuItems }) => {
     const [isShowMenu, setIsShowMenu] = useState(false)
     const [isOpenCollapse, setIsOpenCollapse] = useState(false)
     const [searchValue, setSearchValue] = useState('')
@@ -15,12 +15,12 @@ export default function MenuMobile({ megaMenuItems }) {
 
 
     // navigate to the search page
-    const searchHandler = (event) => {
+    const searchHandler = useCallback((event) => {
         event.preventDefault()
         if (searchValue) {
             navigate(`/search/${searchValue}`)
         }
-    }
+    }, [navigate, searchValue])
 
     return (
         <div className="mob-down-header">
@@ -521,7 +521,9 @@ export default function MenuMobile({ megaMenuItems }) {
             </div>
         </div>
     )
-}
+});
+
+export default MenuMobile;
 
 
 

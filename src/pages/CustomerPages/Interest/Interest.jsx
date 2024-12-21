@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react'
+import { useCallback, useContext, useEffect, useState } from 'react'
 // import components
 import Breadcrumb from '../../../components/modules/Breadcrumb/Breadcrumb'
 import authContext from '../../../contexts/authContext/authContext'
@@ -13,13 +13,16 @@ export default function Interest() {
     const auth = useContext(authContext)
     const [interestProducts, setInterestProducts] = useState([])
 
-    useEffect(() => {
-        // get all favorites from server
-        getAllFavorites()
-    }, [auth])
+    // get all favorites for server
+    const getAllFavorites = useCallback(() => {
+        fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/users/${auth.userID}`)
+            .then(res => res.json())
+            .then(data => setInterestProducts(data.favorites))
+            .catch(error => console.log(error.message))
+    }, [auth]);
 
     // remove product favorites from server
-    const removeFromFavorites = (productID) => {
+    const removeFromFavorites = useCallback((productID) => {
         swal({
             title: 'آیا از حذف محصول ازعلاقه مندی ها مطمعن هستید',
             icon: 'warning',
@@ -28,7 +31,7 @@ export default function Interest() {
             if (result) {
                 const mainFavorites = auth.userInfos.favorites.filter(product => product.id !== productID)
                 const mainUserInfos = { ...auth.userInfos, favorites: mainFavorites }
-                fetch(`http://localhost:4000/users/${auth.userInfos.id}`, {
+                fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/users/${auth.userInfos.id}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json'
@@ -44,15 +47,15 @@ export default function Interest() {
             }
         })
 
-    }
+    }, [auth, getAllFavorites]);
 
-    // get all favorites for server
-    function getAllFavorites() {
-        fetch(`http://localhost:4000/users/${auth.userID}`)
-            .then(res => res.json())
-            .then(data => setInterestProducts(data.favorites))
-            .catch(error => console.log(error.message))
-    }
+    useEffect(() => {
+        document.title = "user-panel page";
+        
+        // get all favorites from server
+        getAllFavorites()
+    }, [auth, getAllFavorites])
+
 
     return (
         <div className="content-wrapper">

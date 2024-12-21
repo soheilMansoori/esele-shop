@@ -18,7 +18,7 @@ export default function Articles() {
     const [articles, setArticles] = useState([])
     useEffect(() => {
         // get all articles from server whit limitations
-        fetch('http://localhost:4000/articles?_limit=5')
+        fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/articles?_limit=5`)
             .then(res => res.json())
             .then(articles => setArticles(articles))
             .catch(error => console.log(error.message))

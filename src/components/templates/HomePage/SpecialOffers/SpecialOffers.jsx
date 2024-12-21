@@ -15,10 +15,11 @@ import 'swiper/css';
 import { Autoplay } from 'swiper/modules';
 
 export default function SpecialOffers() {
-    const [products , setProducts] = useState([])
+    const [products, setProducts] = useState([])
+
     useEffect(() => {
         // get special offers from the server whit limitations 
-        fetch('http://localhost:4000/products?offerPrcend_ne=0&_limit=10')
+        fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/products?offerPrcend_ne=0&_limit=10`)
             .then(res => res.json())
             .then(products => setProducts(products))
             .catch(error => console.log(error.message))
@@ -87,7 +88,7 @@ export default function SpecialOffers() {
                                                 <SwiperSlide key={product.id}
                                                     className="swiper-slide position-relative swiper-slide-active"
                                                     role="group"
-                                                    aria-label={`${product.id} / ${products.length}`}
+                                                    aria-label={`${ product.id } / ${ products.length }`}
                                                     style={{ width: "237.273px" }}
                                                 >
                                                     <ProductBox {...product} />

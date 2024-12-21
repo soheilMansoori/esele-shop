@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react'
+import { useState, useEffect, useContext, useCallback } from 'react'
 // import components
 import Breadcrumb from '../../../components/modules/Breadcrumb/Breadcrumb'
 import authContext from '../../../contexts/authContext/authContext'
@@ -14,21 +14,23 @@ export default function Comments() {
     const [comments, setComments] = useState([])
 
     useEffect(() => {
+        document.title = "user-panel page";
+        
         // get all comments
-        fetch(`http://localhost:4000/comments?userID=${auth.userID}`)
+        fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/comments?userID=${auth.userID}`)
             .then(res => res.json())
             .then(data => setComments(data))
             .catch(error => console.error(error.message));
     }, [auth])
 
     // show comment description in modal 
-    const showDescription = (description) => {
+    const showDescription = useCallback((description) => {
         swal({
             title: description,
             icon: 'info',
             buttons: 'بستن',
         })
-    }
+    }, [])
 
     return (
         <div className="content-wrapper">

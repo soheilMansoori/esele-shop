@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from 'react'
+import { useEffect, useState, useContext, useCallback } from 'react'
 // import components
 import RelatedProducts from '../../components/templates/ProdcutInfoPage/RelatedProducts/RelatedProducts'
 import ProductInfos from '../../components/templates/ProdcutInfoPage/ProductInfo/ProductInfo'
@@ -26,7 +26,7 @@ export default function ProductInfo() {
     const params = useParams()
 
     // notifies
-    const sendCommentNotify = () => toast.success('کامنت شما ثبت شد ', {
+    const sendCommentNotify = useCallback(() => toast.success('کامنت شما ثبت شد ', {
         position: "bottom-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -37,7 +37,7 @@ export default function ProductInfo() {
         theme: "light",
         transition: Slide,
 
-    })
+    }), []);
 
 
     // form validation for comments 
@@ -64,21 +64,32 @@ export default function ProductInfo() {
         },
     })
 
+    // get main product form server
+    const getMainProductInfo = useCallback(() => {
+        fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/products?title=${params.name}`)
+            .then(res => res.json())
+            .then(data => {
+                if (data.length) {
+                    const mainProduct = data[0];
+                    setProductInfo(mainProduct)
+                    // console.log("data is => ", data);
+                } else {
+                    navigate('/404', { replace: true });
+                }
+            }).catch(error => console.log(error.message));
+    }, [params, navigate])
 
-    useEffect(() => {
-        // Automatically scrolls to top whenever page reload
-        window.scrollTo(0, 0)
+    // get all Comments from server
+    const getAllComments = useCallback(() => {
+        fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/comments?productID=${productInfo.id}`)
+            .then(res => res.json())
+            .then(data => setComments(data))
+            .catch(error => console.log(error.message));
+    }, [productInfo]);
 
-        // get main product info 
-        getMainProductInfo()
-
-        // get product comments
-        getAllComments()
-
-    }, [params]);
 
     // send new Comment
-    const sendComment = ({ title, description }) => {
+    const sendComment = useCallback(({ title, description }) => {
         let options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
         let today = new Date().toLocaleDateString('fa-IR', options);
         const mainComment = {
@@ -93,7 +104,7 @@ export default function ProductInfo() {
             accepted: false,
             answer: []
         };
-        fetch(`http://localhost:4000/comments`, {
+        fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/comments`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -110,30 +121,19 @@ export default function ProductInfo() {
             })
             .catch(error => console.log(error.message));
 
-    }
+    }, [form.values, auth, getAllComments, isPositiveComment, sendCommentNotify, productInfo])
 
-    // get main product form server
-    function getMainProductInfo() {
-        fetch(`http://localhost:4000/products?title=${params.name}`)
-            .then(res => res.json())
-            .then(data => {
-                if (data.length) {
-                    const mainProduct = data[0];
-                    setProductInfo(mainProduct)
-                    // console.log("data is => ", data);
-                } else {
-                    navigate('/404', { replace: true });
-                }
-            }).catch(error => console.log(error.message));
-    }
 
-    // get all Comments from server
-    function getAllComments() {
-        fetch(`http://localhost:4000/comments?productID=${productInfo.id}`)
-            .then(res => res.json())
-            .then(data => setComments(data))
-            .catch(error => console.log(error.message));
-    }
+    useEffect(() => {
+        document.title = "product-info page";
+
+        // get main product info 
+        getMainProductInfo()
+
+        // get product comments
+        getAllComments()
+
+    }, [params, getMainProductInfo, getAllComments]);
 
     return (
         <>

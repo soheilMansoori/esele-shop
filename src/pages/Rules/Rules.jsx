@@ -4,8 +4,10 @@ import Footer from '../../components/modules/Footer/Footer'
 
 // import css module
 import './Rules.css'
+import { useEffect } from 'react'
 
 export default function Rules() {
+    useEffect(() => document.title = "rules page");
     return (
         <>
             <Header />

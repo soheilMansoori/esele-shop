@@ -9,6 +9,7 @@ import 'swiper/css/pagination';
 
 // import required modules
 import { Pagination, Autoplay } from 'swiper/modules';
+import { Link } from 'react-router-dom';
 
 
 export default function Slider() {
@@ -16,7 +17,7 @@ export default function Slider() {
 
     useEffect(() => {
         // get slider items from server
-        fetch('http://localhost:4000/sliders')
+        fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/sliders`)
             .then(res => res.json())
             .then(sliders => setSliders(sliders))
             .catch(error => console.log(error.message))
@@ -42,11 +43,9 @@ export default function Slider() {
                 >
                     {sliders.length && sliders.map((slider) => (
                         <SwiperSlide key={slider.id} className="swiper-slide swiper-slide-active" width="100" style={{ marginLeft: "50px" }}>
-
-                            <a href="#">
+                            <Link to="#">
                                 <img src={slider.imgSrc} width="100%" />
-                            </a>
-
+                            </Link>
                         </SwiperSlide>
                     ))}
                 </Swiper>

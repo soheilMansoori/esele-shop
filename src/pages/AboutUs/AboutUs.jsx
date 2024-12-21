@@ -1,12 +1,11 @@
-import { useEffect } from 'react'
-
-// import components
 import Header from '../../components/modules/Header/Header'
 import Footer from '../../components/modules/Footer/Footer'
+import { useEffect } from 'react'
 
 export default function AboutUs() {
-    // Automatically scrolls to top whenever page reload
-    useEffect(() => window.scrollTo(0, 0), [])
+    useEffect(() => {
+        document.title = "about-us page";
+    })
     return (
         <>
             <Header />

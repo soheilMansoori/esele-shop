@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { memo } from 'react'
 import { Link } from 'react-router-dom'
 
 
 
-export default function ProductBox({ id, title, newPrice, prevPrice, offerPrcend, imgSrc, slug, isInStock }) {
+const ProductBox = memo(({ id, title, newPrice, prevPrice, offerPrcend, imgSrc, slug, isInStock }) => {
     return (
         <div title={title} className="quick-product card">
             {offerPrcend ? (
@@ -52,6 +52,7 @@ export default function ProductBox({ id, title, newPrice, prevPrice, offerPrcend
             </div>
         </div>
     )
-}
+})
 
 
+export default ProductBox;

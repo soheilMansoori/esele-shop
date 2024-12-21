@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useCallback, useContext, useEffect, useState } from 'react'
 
 // import formik package
 import { useFormik } from 'formik'
@@ -14,6 +14,8 @@ export default function Login() {
     const auth = useContext(authContext)
     const [isOpenMenu, setIsOpenMenu] = useState(false)
     const navigate = useNavigate()
+
+    useEffect(() => document.title = "login page")
 
     // formik for validation and get inputs values 
     const form = useFormik({
@@ -40,8 +42,8 @@ export default function Login() {
     })
 
     // Handle login  
-    const handleSubmit = ({ username, password }) => {
-        fetch(`http://localhost:4000/users?username=${username}&password=${password}`)
+    const handleSubmit = useCallback(({ username, password }) => {
+        fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/users?username=${username}&password=${password}`)
             .then(res => res.json())
             .then(data => {
                 // console.log('data => ', data);
@@ -56,7 +58,7 @@ export default function Login() {
 
             })
             .catch(error => console.log(error.message))
-    }
+    }, [auth, navigate])
 
     return (
         <div className="full-layout wrapper bg-full-screen-image blank-page dark-layout login-page">

@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { memo } from 'react'
 import { Link } from 'react-router-dom'
 
-export default function Breadcrumb({ item, title, slug }) {
+const Breadcrumb = memo(({ item, title, slug }) => {
     return (
         <div className="row breadcrumbs-top">
             <div className="col-12">
@@ -18,4 +18,6 @@ export default function Breadcrumb({ item, title, slug }) {
             </div>
         </div>
     )
-}
+});
+
+export default Breadcrumb;

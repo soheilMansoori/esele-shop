@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 // import components
 import ProductBox from '../../components/templates/ShopPage/ProductBox/ProductBox';
@@ -22,8 +22,8 @@ import { Autoplay } from 'swiper/modules'
 import './Shop.css'
 
 export default function Shop() {
-    const [price, setPrice] = useState('')
-    const [searchParams, setSearchParams] = useSearchParams();
+    // const [price, setPrice] = useState('')
+    const [searchParams] = useSearchParams();
     const [isShowFilteredBox, setIsShowFilteredBox] = useState(false)
     const [products, setProducts] = useState([])
     const [productsData, setProductsData] = useState({})
@@ -32,55 +32,53 @@ export default function Shop() {
 
     const page = searchParams.get("page") || 1;
 
-
-    useEffect(() => {
-        // Automatically scrolls to top whenever page reload
-        window.scrollTo(0, 0)
-
-        // get products from server
-        getAllProducts()
-
-        // get all categories from server 
-        getAllCategories()
-
-    }, [page, sort])
-
     // get all products from server
-    function getAllProducts() {
-        fetch(`http://localhost:4000/products?_sort=${sort}&_page=${page}&_per_page=8`)
+    const getAllProducts = useCallback(() => {
+        fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/products?_sort=${sort}&_page=${page}&_per_page=8`)
             .then(res => res.json())
             .then(data => {
                 setProductsData(data)
                 setProducts(data.data)
             })
             .catch(error => console.log(error.message))
-    }
+    }, [page, sort])
 
     // get all categories from server 
-    function getAllCategories() {
-        fetch('http://localhost:4000/categories')
+    const getAllCategories = useCallback(() => {
+        fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/categories`)
             .then(res => res.json())
             .then(categories => {
                 // console.log("categories => ", categories)
                 setCategories(categories)
             })
             .catch(error => console.log(error.message))
-    }
+    }, [])
 
     // Handler sort products by price  
-    const sortByPrice = (event) => {
+    const sortByPrice = useCallback((event) => {
         console.log('value => ', event.target.value);
-        // fetch(`http://localhost:4000/products?newPrice_gt=${event.target.value}`)
+        // fetch(`process.env.REACT_APP_BACKEND_BASE_URL/products?newPrice_gt=${event.target.value}`)
         //     .then(res => res.json())
         //     .then(data => console.log(data))
         //     .catch(error => console.log(error.message));
-    }
+    }, [])
 
     // response selector for sort products 
-    const selectHandler = (event) => {
+    const selectHandler = useCallback((event) => {
         // console.log('value => ', event.target.value);
         setSort(event.target.value)
-    }
+    }, [])
+
+
+    useEffect(() => {
+        document.title = "shop page"
+        // get products from server
+        getAllProducts()
+
+        // get all categories from server 
+        getAllCategories()
+
+    }, [page, sort, getAllProducts, getAllCategories])
 
     return (
         <>

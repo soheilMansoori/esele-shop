@@ -19,8 +19,9 @@ import { Autoplay } from 'swiper/modules';
 
 export default function LatestProducts() {
     const [products, setProducts] = useState([])
+
     useEffect(() => {
-        fetch('http://localhost:4000/products?_sort=id&_limit=15')
+        fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/products?_sort=id&_limit=15`)
             .then(res => res.json())
             .then(products => setProducts(products))
             .catch(error => console.log(error.message))

@@ -7,19 +7,19 @@ import Footer from '../../components/modules/Footer/Footer'
 import { Link, useSearchParams } from 'react-router-dom'
 
 export default function Articles() {
-    const [searchParams, setSearchParams] = useSearchParams()
+    const [searchParams] = useSearchParams()
     const sort = searchParams.get('sort') || ''
     const [articles, setArticles] = useState([])
+
     useEffect(() => {
-        // Automatically scrolls to top whenever page reload
-        window.scrollTo(0, 0)
-        
+        document.title = "articles page";
+
         // get all categories from server
-        fetch(`http://localhost:4000/articles?category=${sort}`)
+        fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/articles?category=${sort}`)
             .then(res => res.json())
             .then(articles => setArticles(articles))
             .catch(error => console.log(error.message))
-    }, [searchParams])
+    }, [searchParams, sort])
 
     return (
         <>

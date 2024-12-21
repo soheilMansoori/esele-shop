@@ -14,11 +14,13 @@ import authContext from '../../../contexts/authContext/authContext'
 export default function Orders() {
     const auth = useContext(authContext)
     const [orders, setOrders] = useState([])
-    const [sort, setSort] = useState(100)
+    const [sort] = useState(100)
 
     useEffect(() => {
+        document.title = "user-panel page";
+
         // get all orders form server
-        fetch(`http://localhost:4000/users/${auth.userID}`)
+        fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/users/${auth.userID}`)
             .then(res => res.json())
             .then(data => setOrders(data.orders))
             .catch(error => console.log(error.message));

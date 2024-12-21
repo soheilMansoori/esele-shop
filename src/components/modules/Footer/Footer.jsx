@@ -1,15 +1,16 @@
-import { useEffect , useState} from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 
 export default function Footer() {
     const [categories, setCategories] = useState([])
     useEffect(() => {
         // get all categories from server
-        fetch('http://localhost:4000/categories')
+        fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/categories`)
             .then(res => res.json())
             .then(data => setCategories(data))
             .catch(error => console.log(error.message))
     }, [])
+
     return (
         <div className="footer-web">
             <div className="web-footer">

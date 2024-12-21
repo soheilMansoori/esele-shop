@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from 'react'
+import { useContext, useState, useEffect, useCallback } from 'react'
 // import components
 import Header from '../../components/modules/Header/Header'
 import Footer from '../../components/modules/Footer/Footer'
@@ -20,7 +20,7 @@ export default function UserBasket() {
     const [basketProductsPrice, setBasketProductsPrice] = useState(null)
 
     // notifies start
-    const removeProductFromBasketNotify = () => toast.error('محصول مورد نظر ازسبد خرید حذف شد', {
+    const removeProductFromBasketNotify = useCallback(() => toast.error('محصول مورد نظر ازسبد خرید حذف شد', {
         position: "bottom-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -30,9 +30,9 @@ export default function UserBasket() {
         progress: undefined,
         theme: "light",
         transition: Slide,
-    });
+    }), []);
     // add product notification
-    const addProductNotify = () => toast.success('یک محصول به سبد اضافه شد', {
+    const addProductNotify = useCallback(() => toast.success('یک محصول به سبد اضافه شد', {
         position: "bottom-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -42,9 +42,9 @@ export default function UserBasket() {
         progress: undefined,
         theme: "light",
         transition: Slide,
-    });
+    }), []);
     // remove one item from the basket notification
-    const reduceTheProductNotify = () => toast.warn('یک محصول از سبد کم شد', {
+    const reduceTheProductNotify = useCallback(() => toast.warn('یک محصول از سبد کم شد', {
         position: "bottom-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -54,9 +54,9 @@ export default function UserBasket() {
         progress: undefined,
         theme: "light",
         transition: Slide,
-    });
+    }), []);
     // add to orders notification
-    const addToOrdersNotify = () => toast.success('سفارش شما با موفقیت ثبت شد', {
+    const addToOrdersNotify = useCallback(() => toast.success('سفارش شما با موفقیت ثبت شد', {
         position: "bottom-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -67,27 +67,32 @@ export default function UserBasket() {
         theme: "light",
         transition: Slide,
 
-    })
+    }), [])
     // notifies end
 
 
-    useEffect(() => {
-        // Automatically scrolls to top whenever page reload
-        window.scrollTo(0, 0)
 
-        // get user basket infos from server
-        getUserBasket()
-    }, [])
+    // get user basket items from server 
+    const getUserBasket = useCallback(() => {
+        fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/users/${auth.userID}`)
+            .then(res => res.json())
+            .then(user => {
+                const { userBasket } = user
+                setUserBasket(user.userBasket)
+                setBasketProductsPrice(userBasket.reduce((a, b) => a + (b.newPrice * b.inBasket), 0))
+            })
+            .catch(error => console.log(error.message));
+    }, [auth])
 
     // remove all products from the basket
-    const emptyUserBasket = () => {
+    const emptyUserBasket = useCallback(() => {
         swal({
             title: 'آیا از خالی کردن سبد خرید خود مطمعن هستید؟',
             icon: 'warning',
             buttons: ['نه', 'بله'],
         }).then(result => {
             if (result) {
-                return fetch(`http://localhost:4000/users/${auth.userID}`, {
+                return fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/users/${auth.userID}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json'
@@ -102,11 +107,11 @@ export default function UserBasket() {
                     .catch(error => console.log(error.message));
             }
         })
-    }
+    }, [auth, getUserBasket])
 
     // remove one product from the basket
-    const removeProductFromBasket = (mainProductID) => {
-        fetch(`http://localhost:4000/users/${auth.userID}`, {
+    const removeProductFromBasket = useCallback((mainProductID) => {
+        fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/users/${auth.userID}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -119,10 +124,10 @@ export default function UserBasket() {
                 removeProductFromBasketNotify()
             })
             .catch(error => console.log(error.message));
-    }
+    }, [userBasket, auth, getUserBasket, removeProductFromBasketNotify])
 
     // add anther product to the basket
-    const addProduct = (mainProductID) => {
+    const addProduct = useCallback((mainProductID) => {
         const newUserBasket = auth.userInfos.userBasket.map(product => {
             if (product.id === mainProductID) {
                 return { ...product, inBasket: product.inBasket + 1 }
@@ -131,7 +136,7 @@ export default function UserBasket() {
         })
         const userInfos = { ...auth.userInfos, userBasket: newUserBasket }
 
-        fetch(`http://localhost:4000/users/${auth.userID}`, {
+        fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/users/${auth.userID}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -145,10 +150,10 @@ export default function UserBasket() {
             })
             .catch(error => console.log(error.message));
 
-    }
+    }, [auth, addProductNotify, getUserBasket]);
 
     // remove one item from the basket
-    const reduceTheProduct = (mainProductID) => {
+    const reduceTheProduct = useCallback((mainProductID) => {
         const newUserBasket = auth.userInfos.userBasket.map(product => {
             if (product.id === mainProductID) {
                 return { ...product, inBasket: product.inBasket - 1 }
@@ -157,7 +162,7 @@ export default function UserBasket() {
         })
         const userInfos = { ...auth.userInfos, userBasket: newUserBasket }
 
-        fetch(`http://localhost:4000/users/${auth.userID}`, {
+        fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/users/${auth.userID}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -171,12 +176,11 @@ export default function UserBasket() {
             })
             .catch(error => console.log(error.message));
 
-    }
+    }, [auth, reduceTheProductNotify, getUserBasket]);
 
 
     // add to user orders
-    const addToOrders = () => {
-
+    const addToOrders = useCallback(() => {
         swal({
             title: 'آیا مطمعن هستید از سفارش خود ؟',
             icon: 'warning',
@@ -190,7 +194,7 @@ export default function UserBasket() {
                 const userOrders = [...auth.userInfos.orders, { id: crypto.randomUUID(), date: today, products: [...auth.userInfos.userBasket] }]
                 const userInfos = { ...auth.userInfos, userBasket: [], orders: userOrders };
 
-                fetch(`http://localhost:4000/users/${auth.userID}`, {
+                fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/users/${auth.userID}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json'
@@ -205,19 +209,15 @@ export default function UserBasket() {
                     .catch(error => console.log(error.message));
             }
         })
-    }
+    }, [auth, getUserBasket, addToOrdersNotify]);
 
-    // get user basket items from server 
-    function getUserBasket() {
-        fetch(`http://localhost:4000/users/${auth.userID}`)
-            .then(res => res.json())
-            .then(user => {
-                const { userBasket } = user
-                setUserBasket(user.userBasket)
-                setBasketProductsPrice(userBasket.reduce((a, b) => a + (b.newPrice * b.inBasket), 0))
-            })
-            .catch(error => console.log(error.message));
-    }
+
+    useEffect(() => {
+        document.title = "user-basket page";
+
+        // get user basket infos from server
+        getUserBasket()
+    }, [getUserBasket])
 
     return (
         <>

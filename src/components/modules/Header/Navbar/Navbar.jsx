@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import authContext from '../../../../contexts/authContext/authContext'
 import swal from 'sweetalert'
@@ -18,7 +18,7 @@ export default function Navbar() {
 
 
     // notifies
-    const logoutNotify = () => toast.success('از حساب کاربری خود خارج شدید', {
+    const logoutNotify = useCallback(() => toast.success('از حساب کاربری خود خارج شدید', {
         position: "bottom-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -29,10 +29,10 @@ export default function Navbar() {
         theme: "light",
         transition: Slide,
 
-    })
+    }), [])
 
     useEffect(() => {
-        fetch(`http://localhost:4000/users/${auth.userID}`)
+        fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/users/${auth.userID}`)
             .then(res => res.json())
             .then(user => {
                 const { userBasket } = user
@@ -40,15 +40,15 @@ export default function Navbar() {
                 setBasketProductsPrice(userBasket.reduce((a, b) => a + (b.newPrice * b.inBasket), 0))
             })
             .catch(error => console.log(error.message));
-    }, [auth.render])
+    }, [auth])
 
     // navigate to the search page
-    const searchHandler = (event) => {
+    const searchHandler = useCallback((event) => {
         event.preventDefault()
         if (searchValue) {
             navigate(`/search/${searchValue}`)
         }
-    }
+    }, [navigate, searchValue]);
 
     const logoutHandler = () => {
         swal({
