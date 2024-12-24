@@ -14,14 +14,20 @@ import { Link } from 'react-router-dom';
 
 export default function Slider() {
     const [sliders, setSliders] = useState([])
+    const [windowWidth, setWindowWidth] = useState(null);
 
     useEffect(() => {
+        setWindowWidth(window.innerWidth);
         // get slider items from server
         fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/sliders`)
             .then(res => res.json())
             .then(sliders => setSliders(sliders))
             .catch(error => console.log(error.message))
 
+
+        const resizeHandler = () => setWindowWidth(window.innerWidth);
+        window.addEventListener("resize", resizeHandler);
+        return () => window.removeEventListener("resize", resizeHandler);
     }, [])
 
     return (
@@ -42,9 +48,9 @@ export default function Slider() {
                     style={{ transform: "translate3d(0px, 0px, 0px)", transitionDuration: "0ms" }}
                 >
                     {sliders.length && sliders.map((slider) => (
-                        <SwiperSlide key={slider.id} className="swiper-slide swiper-slide-active" width="100" style={{ marginLeft: "50px" }}>
+                        <SwiperSlide key={slider.id} className="swiper-slide swiper-slide-active" width="100" style={{ marginLeft: "50px", width: "100%" }}>
                             <Link to="#">
-                                <img src={slider.imgSrc} width="100%" />
+                                <img style={{ width: "100%", height: "auto" }} src={windowWidth > 768 ? slider.imgSrc : slider.responserImgSrc} alt='' />
                             </Link>
                         </SwiperSlide>
                     ))}

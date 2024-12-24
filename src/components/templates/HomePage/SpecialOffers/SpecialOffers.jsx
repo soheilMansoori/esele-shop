@@ -33,9 +33,9 @@ export default function SpecialOffers() {
                     <div className="product-box-1 mx-auto">
 
                         <div className=" align-items-center justify-content-center img-phone d-none position-relative">
-                            <img className="image-bg-1" src="./img/HomePage/SpecialOffers/back-ground.png" />
+                            <img className="image-bg-1" src="./img/HomePage/SpecialOffers/back-ground.png" alt='' />
                             <div className="d-flex align-items-start justify-content-center flex-column zindex-1">
-                                <img src="./img/HomePage/SpecialOffers/title.webp" className="w-100" />
+                                <img src="./img/HomePage/SpecialOffers/title.webp" className="w-100" alt='' />
                                 <Link className="text-white" to="/shop">مشاهده بیشتر<svg stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 24 24" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m10.998 16 5-4-5-4v3h-9v2h9z"></path><path d="M12.999 2.999a8.938 8.938 0 0 0-6.364 2.637L8.049 7.05c1.322-1.322 3.08-2.051 4.95-2.051s3.628.729 4.95 2.051S20 10.13 20 12s-.729 3.628-2.051 4.95-3.08 2.051-4.95 2.051-3.628-.729-4.95-2.051l-1.414 1.414c1.699 1.7 3.959 2.637 6.364 2.637s4.665-.937 6.364-2.637C21.063 16.665 22 14.405 22 12s-.937-4.665-2.637-6.364a8.938 8.938 0 0 0-6.364-2.637z"></path></svg>
                                 </Link>
                             </div>
@@ -44,11 +44,11 @@ export default function SpecialOffers() {
                         <div className="w-100 px-md-1 px-0  mb-md-0 offer-box">
                             <div className="img-product-right">
                                 <div className="img-web position-relative">
-                                    <img className="image-bg-1" src="./img/HomePage/SpecialOffers/back-ground.png" />
+                                    <img className="image-bg-1" src="./img/HomePage/SpecialOffers/back-ground.png" alt='' />
                                     <div className="product-offer d-flex position-relative">
                                         <Link className="" to="/shop">مشاهده بیشتر<svg stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 24 24" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="m10.998 16 5-4-5-4v3h-9v2h9z"></path><path d="M12.999 2.999a8.938 8.938 0 0 0-6.364 2.637L8.049 7.05c1.322-1.322 3.08-2.051 4.95-2.051s3.628.729 4.95 2.051S20 10.13 20 12s-.729 3.628-2.051 4.95-3.08 2.051-4.95 2.051-3.628-.729-4.95-2.051l-1.414 1.414c1.699 1.7 3.959 2.637 6.364 2.637s4.665-.937 6.364-2.637C21.063 16.665 22 14.405 22 12s-.937-4.665-2.637-6.364a8.938 8.938 0 0 0-6.364-2.637z"></path></svg>
                                         </Link>
-                                        <img src="./img/HomePage/SpecialOffers/title.webp" />
+                                        <img src="./img/HomePage/SpecialOffers/title.webp" alt='' />
                                     </div>
                                 </div>
                             </div>
@@ -88,7 +88,7 @@ export default function SpecialOffers() {
                                                 <SwiperSlide key={product.id}
                                                     className="swiper-slide position-relative swiper-slide-active"
                                                     role="group"
-                                                    aria-label={`${ product.id } / ${ products.length }`}
+                                                    aria-label={`${product.id} / ${products.length}`}
                                                     style={{ width: "237.273px" }}
                                                 >
                                                     <ProductBox {...product} />

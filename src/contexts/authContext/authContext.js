@@ -1,6 +1,6 @@
 import { createContext, useState, useEffect, useCallback } from "react";
 
-const authContext = createContext({
+const AuthContext = createContext({
     userID: null,
     isLoggedIn: false,
     token: null,
@@ -10,7 +10,7 @@ const authContext = createContext({
     logout: () => null,
 })
 
-export default authContext;
+export default AuthContext;
 
 export const AuthContextProvider = ({ children }) => {
     const [render, reRender] = useState(null)
@@ -67,7 +67,7 @@ export const AuthContextProvider = ({ children }) => {
 
 
     return (
-        <authContext.Provider value={{
+        <AuthContext.Provider value={{
             userID,
             isLoggedIn,
             token,
@@ -79,6 +79,6 @@ export const AuthContextProvider = ({ children }) => {
             render,
         }}>
             {children}
-        </authContext.Provider>
+        </AuthContext.Provider>
     )
 }
