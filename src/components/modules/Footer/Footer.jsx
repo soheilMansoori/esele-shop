@@ -56,7 +56,7 @@ export default function Footer() {
                     <div className="product-footer pl-0 pl-md-4 pl-lg-4 col-12 col-sm-6 col-md-2">
                         <h3>محصولات</h3>
                         <div className="pages-link">
-                            {categories ? (
+                            {categories?.length ? (
                                 <>
                                     {categories.map(category => (
                                         <Link to={`/category/${category.name}`} key={category.id}>

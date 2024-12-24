@@ -5,8 +5,12 @@ import { useLocation } from 'react-router-dom';
 
 const App = () => {
   const location = useLocation();
+
   // scroll to top when route change
-  useEffect(() => document.documentElement.scrollTo({ top: 0, behavior: 'smooth' }), [location])
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    document.documentElement.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [location])
 
 
   return (

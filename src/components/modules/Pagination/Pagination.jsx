@@ -1,10 +1,9 @@
 import React, { memo, useCallback, useEffect, useState } from 'react'
-import { useSearchParams, useLocation } from 'react-router-dom';
+import { useSearchParams, } from 'react-router-dom';
 
 const Pagination = memo(({ pagesCount, currentPage, prev, next }) => {
     const [searchParams, setSearchParams] = useSearchParams();
     const [pages, setPages] = useState([]);
-    const location = useLocation();
 
     useEffect(() => {
         pagesCount && setPages(Array.from(Array(Number(pagesCount)).keys()))
@@ -15,7 +14,7 @@ const Pagination = memo(({ pagesCount, currentPage, prev, next }) => {
             setPages(copyPages)
         }
 
-    }, [pagesCount, pages])
+    }, [pagesCount])
 
 
     const nextPage = useCallback(() => {

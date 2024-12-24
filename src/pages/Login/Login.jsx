@@ -15,7 +15,7 @@ export default function Login() {
     const [isOpenMenu, setIsOpenMenu] = useState(false)
     const navigate = useNavigate()
 
-    useEffect(() => document.title = "login page")
+    useEffect(() => { document.title = "login page" }, []);
 
     // formik for validation and get inputs values 
     const form = useFormik({

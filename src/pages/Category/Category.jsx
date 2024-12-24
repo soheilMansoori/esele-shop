@@ -29,17 +29,26 @@ export default function Category() {
     const [sort, setSort] = useState('new')
     const [categories, setCategories] = useState([])
     const page = searchParams.get("page") || 1;
+    const limit = 8;
 
-
-    useEffect(() => document.title = "category page");
 
 
     const getAllProducts = useCallback(() => {
-        fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/products?category=${params.name}&_sort=${sort}&_page=${page}&_per_page=8`)
+        fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/products?_sort=${sort}`)
             .then(res => res.json())
-            .then(data => {
-                setProductsData(data)
-                setProducts(data.data)
+            .then(products => {
+                const filteredProducts = products?.filter(product => product.category.includes(params.name))
+                const paginationProducts = filteredProducts?.slice(((page * limit) - limit), (limit * page));
+                const pageCount = Math.ceil(filteredProducts.length / limit);
+
+                // set product pagination data
+                setProductsData({
+                    pages: pageCount,
+                    next: pageCount > page ? Number(page) + 1 : null,
+                    prev: page > pageCount ? null : Number(page) - 1,
+                });
+                // set products
+                setProducts(paginationProducts);
             })
             .catch(error => console.log(error.message))
     }, [params, sort, page]);
@@ -56,6 +65,8 @@ export default function Category() {
 
 
     useEffect(() => {
+        document.title = "category page";
+
         // get all products from server 
         getAllProducts()
 

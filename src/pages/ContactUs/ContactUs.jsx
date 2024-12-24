@@ -6,7 +6,7 @@ import Footer from '../../components/modules/Footer/Footer';
 import { useEffect } from 'react';
 
 export default function ContactUs() {
-    useEffect(() => document.title = "contact-us page")
+    useEffect(() => { document.title = "contact-us page" }, [])
     return (
         <>
             <Header />

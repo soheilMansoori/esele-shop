@@ -28,7 +28,7 @@ export const AuthContextProvider = ({ children }) => {
         setUserInfos(userInfos)
         setUserRole(userInfos.role)
         localStorage.setItem('user', JSON.stringify({ token: userToken }))
-    })
+    }, [])
 
 
     // logout 
@@ -47,7 +47,7 @@ export const AuthContextProvider = ({ children }) => {
         const localStorageData = JSON.parse(localStorage.getItem('user'))
 
         if (localStorageData) {
-            fetch(`process.env.REACT_APP_BACKEND_BASE_URL/users?token=${localStorageData.token}`)
+            fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/users?token=${localStorageData.token}`)
                 .then(res => res.json())
                 .then(data => {
                     const mainData = data[0];

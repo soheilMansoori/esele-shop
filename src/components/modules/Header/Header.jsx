@@ -28,7 +28,7 @@ function Header() {
 
         // responseHandler for response Header
         const responseHandler = () => {
-            return setWindowWidth(window.innerWidth);
+            setWindowWidth(window.innerWidth);
         }
 
         // save performance 

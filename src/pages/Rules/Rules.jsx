@@ -7,7 +7,7 @@ import './Rules.css'
 import { useEffect } from 'react'
 
 export default function Rules() {
-    useEffect(() => document.title = "rules page");
+    useEffect(() => { document.title = "rules page" }, []);
     return (
         <>
             <Header />

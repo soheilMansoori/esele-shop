@@ -12,7 +12,7 @@ import { useEffect } from 'react'
 
 
 export default function Home() {
-  useEffect(() => document.title = "Home Page");
+  useEffect(() => { document.title = "Home Page" }, []);
   return (
     <>
       <Header />

@@ -24,21 +24,35 @@ import './Shop.css'
 export default function Shop() {
     // const [price, setPrice] = useState('')
     const [searchParams] = useSearchParams();
-    const [isShowFilteredBox, setIsShowFilteredBox] = useState(false)
-    const [products, setProducts] = useState([])
-    const [productsData, setProductsData] = useState({})
-    const [sort, setSort] = useState('new')
-    const [categories, setCategories] = useState([])
+    const [isShowFilteredBox, setIsShowFilteredBox] = useState(false);
+    const [products, setProducts] = useState([]);
+    const [productsData, setProductsData] = useState({
+        pages: 0,
+        prev: false,
+        next: false
+    });
+    const [sort, setSort] = useState('new');
+    const [categories, setCategories] = useState([]);
 
+    // pagination data 
+    const limit = 8;
     const page = searchParams.get("page") || 1;
 
     // get all products from server
     const getAllProducts = useCallback(() => {
-        fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/products?_sort=${sort}&_page=${page}&_per_page=8`)
+        fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/products?_sort=${sort}`)
             .then(res => res.json())
-            .then(data => {
-                setProductsData(data)
-                setProducts(data.data)
+            .then(products => {
+                const paginationProducts = products?.slice(((page * limit) - limit), (limit * page));
+                const pageCount = Math.ceil(products.length / limit);
+                // set product pagination data
+                setProductsData({
+                    pages: pageCount,
+                    next: pageCount > page ? Number(page) + 1 : null,
+                    prev: page > pageCount ? null : Number(page) - 1,
+                });
+                // set products
+                setProducts(paginationProducts);
             })
             .catch(error => console.log(error.message))
     }, [page, sort])
@@ -56,7 +70,7 @@ export default function Shop() {
 
     // Handler sort products by price  
     const sortByPrice = useCallback((event) => {
-        console.log('value => ', event.target.value);
+        // console.log('value => ', event.target.value);
         // fetch(`process.env.REACT_APP_BACKEND_BASE_URL/products?newPrice_gt=${event.target.value}`)
         //     .then(res => res.json())
         //     .then(data => console.log(data))
@@ -79,6 +93,7 @@ export default function Shop() {
         getAllCategories()
 
     }, [page, sort, getAllProducts, getAllCategories])
+
 
     return (
         <>
@@ -125,7 +140,7 @@ export default function Shop() {
                                                 <img src={category.imgSrc} />
                                             </div>
                                             <div className="title-section">
-                                                <h2 className="text-bold-600 mt-1 mb-25"></h2>
+                                                <h2 className="text-bold-600 mt-1 mb-25" ></h2>
                                                 <p className="mb-0">{category.name}</p>
                                             </div>
                                         </div>
@@ -270,7 +285,7 @@ export default function Shop() {
                         <Pagination currentPage={page} pagesCount={productsData.pages} prev={productsData.prev} next={productsData.next} />
                     </div>
                 </div>
-            </main>
+            </main >
             <Footer />
         </>
     )

@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import Breadcrumb from '../../../components/modules/Breadcrumb/Breadcrumb'
 
 export default function Invoices() {
-    useEffect(() => document.title = "user-panel page");
+    useEffect(() => { document.title = "user-panel page" }, []);
 
     return (
         <div className="content-wrapper">

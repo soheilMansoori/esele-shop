@@ -61,7 +61,7 @@ export default function Categories() {
                                 id="swiper-wrapper-75877565ddcac912"
                                 aria-live="off"
                             >
-                                {categories.length && categories.map((category) => (
+                                {categories?.length && categories.map((category) => (
                                     <SwiperSlide key={category.id} className="swiper-slide d-flex flex-column align-items-center justify-content-center swiper-slide-prev" role="group" aria-label={`${category.id}/${categories.length}`} style={{ width: "202.182px" }}>
                                         <div className="category-parents d-flex align-items-center justify-content-center ">
                                             <div className="category-box  d-flex align-items-center justify-content-center">

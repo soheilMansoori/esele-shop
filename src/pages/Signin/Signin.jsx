@@ -79,7 +79,7 @@ export default function Signin() {
   }, [navigate, auth])
 
 
-  useEffect(() => document.title = "signin page");
+  useEffect(() => { document.title = "signin page" }, []);
 
   return (
     <div className="full-layout wrapper bg-full-screen-image blank-page dark-layout login-page">

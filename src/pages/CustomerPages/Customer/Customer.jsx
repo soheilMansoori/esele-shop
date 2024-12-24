@@ -17,7 +17,7 @@ export default function Customer() {
     const auth = useContext(authContext)
     const navigate = useNavigate()
 
-    useEffect(() => document.title = "user-panel page");
+    useEffect(() => { document.title = "user-panel page" }, []);
 
     // logout Handler 
     const logoutHandler = () => {

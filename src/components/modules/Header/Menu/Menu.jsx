@@ -4,7 +4,7 @@ import { Link, NavLink } from 'react-router-dom'
 export default function Menu({ megaMenuItems }) {
     const [isShowMegaMenu, setIsShowMegaMenu] = useState(false)
     const [megaMenuChildItems, setMegaMenuChildItems] = useState([])
-    useEffect(() => setMegaMenuChildItems(megaMenuItems[0]?.products), [megaMenuItems])
+    useEffect(() => { setMegaMenuChildItems(megaMenuItems[0]?.products) }, [megaMenuItems])
 
     return (
         <div className="d-flex dif-menu-bar">

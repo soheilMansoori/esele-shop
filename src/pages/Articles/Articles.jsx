@@ -15,9 +15,15 @@ export default function Articles() {
         document.title = "articles page";
 
         // get all categories from server
-        fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/articles?category=${sort}`)
+        fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/articles`)
             .then(res => res.json())
-            .then(articles => setArticles(articles))
+            .then(articles => {
+                if (sort) {
+                    const filteredArticles = articles.filter(article => article.category.includes(sort));
+                    return setArticles(filteredArticles)
+                }
+                setArticles(articles);
+            })
             .catch(error => console.log(error.message))
     }, [searchParams, sort])
 
