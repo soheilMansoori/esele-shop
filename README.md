@@ -4,6 +4,13 @@ A modern practice e-commerce project for a cosmetics and personal care store, bu
 
 ---
 
+## 🔗 Project Links
+
+- 💻 **Live Demo**: [View Demo](https://esele-shop.vercel.app/)
+- 📁 **GitHub Repository**: [View on GitHub](https://github.com/soheilMansoori/esele-shop)
+
+---
+
 ## 🚀 Features
 
 - 🔐 **Authentication System** – Login and register functionality.
