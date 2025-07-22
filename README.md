@@ -1,70 +1,81 @@
-# Getting Started with Create React App
+# 🛍️ Esele-Shop (React + PWA)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A modern practice e-commerce project for a cosmetics and personal care store, built with **React** and designed to simulate a real-world project. It includes both customer-facing pages and a **user panel**, with **PWA support** for mobile/desktop installation.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## 🚀 Features
 
-### `npm start`
+- 🔐 **Authentication System** – Login and register functionality.
+- 🛒 **Product Listing** – View products with categories and filters.
+- 👀 **Product Details** – View product, add to cart, comment, and more.
+- 📞 **Contact Page** – Submit inquiries via the contact form.
+- 🔍 **Global Search** – Search across all categories and filter results.
+- 📚 **Articles Page** – Browse informative articles.
+- 🧺 **Cart System** – Add products to cart, view cart, and place orders.
+- 👤 **User Panel** – View orders, favorites, and comments.
+  - Test login:
+    - **Username**: `soheil`
+    - **Password**: `soheil1382`
+- 📱 **PWA Support** – Install the app on mobile and desktop.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+---
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 🛠️ Technologies Used
 
-### `npm test`
+- **React**
+- **React Router DOM**
+- **Bootstrap** & **React-Bootstrap**
+- **React-Spinners**, **React-Toastify**, **SweetAlert**
+- **Formik**
+- **Swiper**, **HTML**, **CSS**
+- **JSON Server** – For simulating a backend (API)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 📸 Screenshots
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### HomePage
+![Homepage](./screenshots/home.png)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### ProductsPage
+![ProductsPage](./screenshots/products.png)
 
-### `npm run eject`
+### ProductPage
+![ProductPage](./screenshots/product.png)
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### LoginPage
+![LoginPage](./screenshots/login.png)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### AboutUsPage
+![AboutUsPage](./screenshots/about.png)
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### contactPage
+![contactPage](./screenshots/contact.png)
 
-## Learn More
+### ArticlePage
+![ArticlePage](./screenshots/article.png)
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### ArticlesPage
+![ArticlesPage](./screenshots/articles.png)
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### UserPanelPage
+![UserPanelPage](./screenshots/user-panle.png)
 
-### Code Splitting
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## 📦 Installation & Run
 
-### Analyzing the Bundle Size
+```bash
+# Clone the repository
+git clone https://github.com/soheilMansoori/esele-shop
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+# Navigate into the project directory
+cd esele-shop
 
-### Making a Progressive Web App
+# Install dependencies
+npm install
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+# Start the project
+npm start
