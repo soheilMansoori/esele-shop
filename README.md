@@ -62,7 +62,7 @@ A modern practice e-commerce project for a cosmetics and personal care store, bu
 ![ArticlesPage](./screenshots/articles.png)
 
 ### UserPanelPage
-![UserPanelPage](./screenshots/user-panle.png)
+![UserPanelPage](./screenshots/user-panel.png)
 
 
 ## 📦 Installation & Run
